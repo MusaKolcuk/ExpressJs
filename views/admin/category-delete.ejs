@@ -18,7 +18,7 @@
                         <b> <%= category.name %></b> <br> isimli kategori kaydını silmek istiyor musunuz ?
                     </p>
                     <form method="post">     <!-- form method = "post" kullandigimiz icin req.body den cagiricaz. -->
-                        <input type="hidden" name = "categoryid" value="<%= category.categoryid %>">
+                        <input type="hidden" name = "categoryid" value="<%= category.id %>">
                         <button class="btn btn-danger" type="submit">Evet</button>
                         <a href="/admin/categories" class = "btn btn-primary">Vazgeç</a>
                     </form>

@@ -2,10 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 
-const Blog = require("../models/blog");
-const Category = require("../models/category")
 
-const { Op} = require("sequelize");
 
 
 // const data = {          //Buraya artık ihtiyacimiz yok cünkü veri tabanindan verileri cekiyoruz.
@@ -47,123 +44,16 @@ const { Op} = require("sequelize");
 //     ]
 // }
 
+const userController = require("../controllers/user");
 
-router.use("/blogs/category/:categoryid", async function(req, res) {
-    const id = req.params.categoryid;
-
-    try {
-        const blogs = await Blog.findAll({
-            where: {
-                categoryid: id,
-                onay: true
-            },
-            raw: true
-        });
-        const categories = await Blog.findAll({ raw: true });
-
-        res.render("users/blogs", {
-            title: "Tüm Kurslar",
-            blogs: blogs,
-            categories: categories,
-            selectedCategory: id
-    })
-}
-
-    catch(err) {
-        console.log(err);
-    }
-});
+router.use("/blogs/category/:categoryid", userController.blogs_by_category);
 
 
+router.use("/blogs/:blogid", userController.blogs_details);
 
+router.use("/blogs", userController.blog_list);
 
-router.use("/blogs/:blogid", async function(req, res) {
-    const id = req.params.blogid;
-
-    try {
-        const blog = await Blog.findOne({
-            where: {
-                blogid: id
-            },
-            raw: true
-        });
-
-
-        if(blog) {
-            return res.render("users/blog-details", {
-                title: blog.baslik,
-                blog: blog,
-                selectedCategory: null
-
-            });
-        }
-
-        res.redirect("/");
-    }
-
-    catch(err) {
-        console.log(err);
-    }
-});
-
-router.use("/blogs", async function(req, res) {
-
-    try {
-        const blogs = await Blog.findAll({
-            where: {
-                onay: {
-                    [Op.eq]: true // onay = 1
-                }
-            },
-            raw: true
-        });
-        const categories = await Category.findAll({ raw: true});
-
-        res.render("users/blogs", {
-            title: "Popüler Kurslar",
-            blogs: blogs,
-            categories: categories,
-            selectedCategory: null
-
-    })
-    }
-
-    catch(err) {
-        console.log(err);
-    }
-    });
-
-router.use("/", async function(req, res) {
-
-    try {
-        const blogs = await Blog.findAll({
-            where: {
-                [Op.and]: [
-                    {anasayfa: true},
-                    {onay: true}
-                ]
-            },
-            raw: true
-        });
-        const categories = await Category.findAll({ raw: true });
-
-        console.log(blogs);
-        console.log(categories);
-
-        res.render("users/anasayfa", {
-            title: "Tüm Kurslar",
-            blogs: blogs,
-            categories: categories,
-            selectedCategory: null
-
-    })
-    }
-
-    catch(err) {
-        console.log(err);
-    }
-
-    });
+router.use("/", userController.index);
 
 
 module.exports = router;  // router iceriklerini disariya actik.
