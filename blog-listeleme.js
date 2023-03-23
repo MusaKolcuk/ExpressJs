@@ -10,6 +10,7 @@ app.use(express.urlencoded({extended: false}));     // express.urlencoded bir ex
 const path = require("path");
 const userRoutes = require("./routes/user");
 const adminRoutes = require("./routes/admin");
+const authRoutes = require("./routes/auth");
 
 
 
@@ -18,12 +19,21 @@ app.use("/static", express.static(path.join(__dirname, "public")));// public kla
 // path.join ile __dirname kullanarak islemi ana dizin uzerinden baslattik.
 
 app.use("/admin", adminRoutes);     // admin.js dosyasini buraya ekledik. Karisiklik olmasın diye ayri dosyada yazdik. İstersek bu sayfayada user ve admin dosyalarını yazabilirdik.
+app.use("/account", authRoutes);
 app.use(userRoutes);
 
 const sequelize = require("./data/db");
 const dummyData = require("./data/dummy-data");
 const Category = require("./models/category");
 const Blog = require("./models/blog");
+const User = require("./models/user");
+
+Blog.belongsTo(User, {
+    foreignKey: {
+        allowNull: true
+    }
+});  //Bir blog yalnızca bir User a ait olabilir.
+User.hasMany(Blog);    // Bir User birden fazla Blog a sahip olabilir.
 
 // ilişkiler
 // one-to-many

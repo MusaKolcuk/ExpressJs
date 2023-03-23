@@ -17,9 +17,9 @@ router.get("/category/delete/:categoryid", adminContoller.get_category_delete);
 router.post("/category/delete/:categoryid", adminContoller.post_category_delete);
 
 
+router.get("/blog/create", adminContoller.get_blog_create);
 
-router.get("/blog/create", adminContoller.get_blog_create);;
-
+router.post("/categories/remove", adminContoller.get_category_remove);
 
 router.post("/blog/create", imageUpload.upload.single("resim"), adminContoller.post_blog_create);
 

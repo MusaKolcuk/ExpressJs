@@ -46,18 +46,12 @@ const router = express.Router();
 
 const userController = require("../controllers/user");
 
-router.use("/blogs/category/:categoryid", userController.blogs_by_category);
+router.get("/blogs/category/:slug", userController.blog_list);
 
+router.get("/blogs/:slug", userController.blogs_details);
 
-router.use("/blogs/:blogid", userController.blogs_details);
+router.get("/blogs", userController.blog_list);
 
-router.use("/blogs", userController.blog_list);
+router.get("/", userController.index);
 
-router.use("/", userController.index);
-
-
-module.exports = router;  // router iceriklerini disariya actik.
-
-
-
-
+module.exports = router;
